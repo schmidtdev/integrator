@@ -1,0 +1,145 @@
+<div class="row justify-content-between">
+  {{#each integrations}}
+    <div class="integration-card card">
+      <div class="card-body">
+        <div class="logo">
+          <img src="{{this.logo}}" alt="{{this.name}} logo" class="centered img-fluid" style="max-width: 75%; height: 120px;">
+        </div>
+        <div class="name">
+          <h3>{{this.name}}</h3>
+        </div>
+        <div class="actions">
+          {{#if this.connected}}
+            <button type="button" class="btn btn-primary edit-connection" data-bs-toggle="modal" data-bs-target="#configureModal" data-integration="{{this.name}}" data-email="{{this.email}}" data-password="{{this.password}}" data-tables="{{this.tables}}">Edit Connection</button>
+            <button class="btn btn-danger remove-connection" data-id="{{this.id}}">Remove Connection</button>
+          {{else}}
+            <button type="button" class="btn btn-success configure-connection" data-bs-toggle="modal" data-bs-target="#configureModal" data-integration="{{this.name}}">Configure Connection</button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="configureModal" tabindex="-1" aria-labelledby="configureModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="configureModalLabel">Configure Connection</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="configureForm">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+          <div class="form-group mt-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group mt-3">
+            <label for="tables">Select Tables</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="pedidos" id="tablePedidos">
+              <label class="form-check-label" for="tablePedidos">
+              Pedidos
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="visitas" id="tableVisitas">
+              <label class="form-check-label" for="tableVisitas">
+              Visitas
+              </label>
+            </div>
+            <!-- Add more checkboxes as needed -->
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveConfiguration">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .integration-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    width: calc(25% - 20px);
+  }
+  .logo img.centered {
+    display: block;
+    margin: 0 auto;
+  }
+  .actions button {
+    margin: 5px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const configureButtons = document.querySelectorAll('.configure-connection, .edit-connection');
+    configureButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const integrationName = this.getAttribute('data-integration');
+        document.getElementById('configureModalLabel').innerText = `Configure Connection for ${integrationName}`;
+        
+        // If editing, populate the form with existing data
+        if (this.classList.contains('edit-connection')) {
+          document.getElementById('email').value = this.getAttribute('data-email');
+          document.getElementById('password').value = this.getAttribute('data-password');
+          const tables = this.getAttribute('data-tables').split(',');
+          const tableOptions = document.getElementById('tables').options;
+          for (let i = 0; i < tableOptions.length; i++) {
+            tableOptions[i].selected = tables.includes(tableOptions[i].value);
+          }
+        } else {
+          // Clear the form for new configuration
+          document.getElementById('configureForm').reset();
+        }
+      });
+    });
+
+    document.getElementById('saveConfiguration').addEventListener('click', function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const tables = Array.from(document.getElementById('tables').selectedOptions).map(option => option.value);
+      
+      // Handle the form submission logic here
+      console.log('Email:', email);
+      console.log('Password:', password);
+      console.log('Selected Tables:', tables);
+
+      // Close the modal
+      $('#configureModal').modal('hide');
+    });
+
+    const removeButtons = document.querySelectorAll('.remove-connection');
+    removeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const integrationId = this.getAttribute('data-id');
+        if (confirm('Are you sure you want to remove this connection?')) {
+          // Send request to remove connection
+          fetch(`/remove-connection/${integrationId}`, {
+            method: 'DELETE'
+          }).then(response => {
+            if (response.ok) {
+              // Remove the card from the UI
+              this.closest('.integration-card').remove();
+            } else {
+              alert('Failed to remove connection');
+            }
+          });
+        }
+      });
+    });
+  });
+</script>
