@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análise de Transações</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .details-table {
+      background-color: #f9f9f9;
+    }
+    .table-striped > tbody > tr:not(.details-row):nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05) !important;
+    }
+    .table-striped > tbody > tr:not(.details-row):nth-of-type(even) {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Análise de Transações</h1>
+    <ul class="nav nav-tabs" id="transactionTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="true">Pedidos</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="visits-tab" data-bs-toggle="tab" data-bs-target="#visits" type="button" role="tab" aria-controls="visits" aria-selected="false">Visitas</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="transactionTabsContent">
+      <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+        <table class="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th>Formulário</th>
+              <th>Cliente</th>
+              <th>Valor Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each orders}}
+            <tr data-bs-toggle="collapse" data-bs-target="#details-{{@index}}" aria-expanded="false" aria-controls="details-{{@index}}">
+              <td>{{this.cdpedido}}</td>
+              <td>{{this.cliente.nmnick}}</td>
+              <td>{{this.vrtotal}}</td>
+            </tr>
+            <tr id="details-{{@index}}" class="collapse details-row">
+              <td colspan="3">
+                <table class="table details-table">
+                  <tr>
+                    <td><strong>Razão Social:</strong> {{this.cliente.nmrazao}}</td>
+                    <td><strong>Nome:</strong> {{this.cliente.nmnick}}</td>
+                    <td><strong>CNPJ:</strong> {{this.cliente.cdcnpj}}</td>
+                  </tr>
+                </table>
+                <table class="table details-table mt-3">
+                  <thead>
+                    <tr>
+                      <th>Produto</th>
+                      <th>Preço</th>
+                      <th>Quantidade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each this.peditems}}
+                    <tr>
+                      <td>{{this.produto.descricao}}</td>
+                      <td>{{this.preco}}</td>
+                      <td>{{this.qtd}}</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="visits" role="tabpanel" aria-labelledby="visits-tab">
+        <table class="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>ID da Transação</th>
+              <th>Tamanho dos Dados</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each visits}}
+            <tr data-bs-toggle="collapse" data-bs-target="#details-visit-{{@index}}" aria-expanded="false" aria-controls="details-visit-{{@index}}">
+              <td>{{this.date}}</td>
+              <td>{{this.transactionId}}</td>
+              <td>{{this.dataSize}}</td>
+            </tr>
+            <tr id="details-visit-{{@index}}" class="collapse details-row"></tr>
+              <td colspan="3">
+                <table class="table details-table">
+                  <tr>
+                    <td><strong>Data:</strong> {{this.date}}</td>
+                    <td><strong>ID da Transação:</strong> {{this.transactionId}}</td>
+                    <td><strong>Tamanho dos Dados:</strong> {{this.dataSize}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

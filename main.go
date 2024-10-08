@@ -1,10 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
+	"os"
+	"schmidtdev/integrator/integrations"
+	"schmidtdev/integrator/storage"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/template/handlebars/v2"
 	"github.com/joho/godotenv"
 )
@@ -14,6 +18,25 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file")
+	}
+
+	config := &storage.Config{
+		Host:     os.Getenv("WEBGR_HOST"),
+		Port:     os.Getenv("WEBGR_PORT"),
+		User:     os.Getenv("WEBGR_USER"),
+		Password: os.Getenv("WEBGR_PASSWORD"),
+		DBName:   os.Getenv("WEBGR_DB"),
+		SSLMode:  os.Getenv("WEBGR_SSL_MODE"),
+	}
+
+	db, err := storage.NewConnection(config)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	webgrRepository := &integrations.WebgrRepository{
+		DB: db,
 	}
 
 	engine := handlebars.New("./views", ".hbs")
@@ -72,7 +95,7 @@ func main() {
 		}, "layouts/main")
 	})
 
-	app.Get("/integrations", func(c *fiber.Ctx) error {
+	app.Get("/integracoes", func(c *fiber.Ctx) error {
 		return c.Render("integrations", fiber.Map{
 			"Title": "Integrações",
 			"integrations": []fiber.Map{
@@ -100,15 +123,33 @@ func main() {
 		}, "layouts/main")
 	})
 
-	app.Use(basicauth.New(basicauth.Config{
-		Users: map[string]string{
-			"admin": "password",
-		},
-	}))
+	app.Get("/transacoes", func(c *fiber.Ctx) error {
+		resp, err := http.Get("http://localhost:3000/api/webgr/pedidos")
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to fetch data")
+		}
+		defer resp.Body.Close()
 
-	app.Get("/api", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"message": "Hello, World!"})
+		if resp.StatusCode != http.StatusOK {
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to fetch data")
+		}
+
+		var result struct {
+			Data []fiber.Map `json:"data"`
+		}
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("Failed to decode data")
+		}
+
+		pedidos := result.Data
+
+		return c.Render("transactions", fiber.Map{
+			"Title":  "Transações",
+			"orders": pedidos,
+		}, "layouts/main")
 	})
+
+	webgrRepository.SetupRoutes(app)
 
 	app.Listen(":3000")
 }
