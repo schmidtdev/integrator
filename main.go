@@ -36,13 +36,13 @@ func main() {
 			return c.Redirect("/dashboard")
 		}
 		return c.Render("error", fiber.Map{
-			"errorMessage": "Invalid credentials",
+			"errorMessage": "Credenciais inválidas",
 		})
 	})
 
 	app.Get("/dashboard", func(c *fiber.Ctx) error {
 		return c.Render("home", fiber.Map{
-			"Title": "Welcome, admin!",
+			"Title": "Dashboard",
 			"transactionLogs": []fiber.Map{
 				{
 					"date":   "01/10/2023",
@@ -74,12 +74,12 @@ func main() {
 
 	app.Get("/integrations", func(c *fiber.Ctx) error {
 		return c.Render("integrations", fiber.Map{
-			"Title": "Integrations",
+			"Title": "Integrações",
 			"integrations": []fiber.Map{
 				{
 					"name":      "WebGR",
 					"logo":      "https://webgr.com.br/wp-content/uploads/2024/01/favicon-aplicativo-webgr.png",
-					"connected": true,
+					"connected": false,
 				},
 				{
 					"name":      "WebMais",

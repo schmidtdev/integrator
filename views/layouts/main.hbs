@@ -1,19 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}}</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <title>{{Title}}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <style>
     .sidebar {
       width: 60px;
       transition: width 0.3s;
     }
+
     .sidebar.expanded {
       width: 200px;
     }
+
     .nav-link {
       display: flex;
       align-items: center;
@@ -21,21 +26,26 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .nav-link span {
       display: none;
     }
+
     .sidebar.expanded .nav-link span {
       display: inline;
     }
+
     .nav-link i {
       margin-right: 10px;
     }
+
     #main {
       width: calc(100% - 60px);
       transition: width 0.3s;
     }
   </style>
 </head>
+
 <body>
   <div class="container-fluid">
     <div class="row">
@@ -49,22 +59,22 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/integrations">
-                <i class="bi bi-plug"></i> <span>Integrations</span>
+                <i class="bi bi-plug"></i> <span>Integrações</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/reports">
-                <i class="bi bi-graph-up"></i> <span>Reports</span>
+                <i class="bi bi-graph-up"></i> <span>Relatórios</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/transactions">
-                <i class="bi bi-arrow-left-right"></i> <span>Transactions</span>
+                <i class="bi bi-arrow-left-right"></i> <span>Transações</span>
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/settings">
-                <i class="bi bi-gear"></i> <span>Settings</span>
+                <i class="bi bi-gear"></i> <span>Configurações</span>
               </a>
             </li>
           </ul>
@@ -72,34 +82,85 @@
       </nav>
 
       <main role="main" id="main" class="col-md-10 col-lg-10 px-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <div class="input-group w-50 mx-auto">
-            <input type="text" class="form-control" placeholder="Search or command" aria-label="Search or command">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="input-group w-50 mx-auto">
+            <select class="form-select" id="selectCommands" aria-label="Comandos">
+              <option selected>Comandos</option>
+              <optgroup label="Início">
+                <option data-link="/dashboard" data-icon="bi bi-speedometer2" value="Dashboard">Dashboard</option>
+              </optgroup>
+              <optgroup label="Relatórios">
+                <option data-link="/reports" data-icon="bi bi-geo-alt" value="Relatório de Visitas">Relatório de Visitas</option>
+                <option data-link="/reports" data-icon="bi bi-cart" value="Relatório de Pedidos">Relatório de Pedidos</option>
+                <option data-link="/reports" data-icon="bi bi-bar-chart" value="Relatório de Transações">Relatório de Transações</option>
+              </optgroup>
+              <optgroup label="Gerenciamento de dados">
+                <option data-link="/integrations" data-icon="bi bi-plug" value="Integrações">Integrações</option>
+                <option data-link="/transactions" data-icon="bi bi-arrow-left-right" value="Transação de Dados">Transação de Dados</option>
+              </optgroup>
+              <optgroup label="Configurações">
+                <option data-link="/settings" data-icon="bi bi-gear" value="Configurações">Configurações</option>
+              </optgroup>
+            </select>
           </div>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <button type="button" class="btn btn-sm btn-outline-secondary">Notifications</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">User Profile</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-bell"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-gear"></i>
+              </button>
             </div>
           </div>
         </div>
         {{{embed}}}
-        </div>
-      </main>
     </div>
+    </main>
+  </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    document.getElementById('sidebar').addEventListener('mouseenter', function() {
+    document.getElementById('sidebar').addEventListener('mouseenter', function () {
       this.classList.add('expanded');
       document.getElementById('main').style.width = 'calc(100% - 200px)';
     });
-    document.getElementById('sidebar').addEventListener('mouseleave', function() {
+    document.getElementById('sidebar').addEventListener('mouseleave', function () {
       this.classList.remove('expanded');
       document.getElementById('main').style.width = 'calc(100% - 60px)';
     });
+
+    $(document).ready(function () {
+      function formatState(state) {
+        if (!state.id) {
+          return state.text;
+        }
+        const icon = $(state.element).data('icon');
+        return $('<span><i class="' + icon + '"></i> ' + state.text + '</span>');
+      }
+
+      $('#selectCommands').select2({
+        placeholder: 'Comandos',
+        allowClear: false,
+        templateResult: formatState,
+        templateSelection: formatState
+      });
+
+      $('#selectCommands').on('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const link = selectedOption.getAttribute('data-link');
+        if (link) {
+          window.location.href = link;
+        }
+      });
+    });
   </script>
 </body>
+
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,13 +14,13 @@
 <body>
   <!-- Secondary Navbar for Quick Access -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Quick Access</a>
+    <a class="navbar-brand" href="#">Acesso Rápido</a>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="/reports"><i class="bi bi-graph-up"></i> Reports</a></li>
-        <li class="nav-item"><a class="nav-link" href="/transactions"><i class="bi bi-arrow-left-right"></i> Transactions Details</a></li>
-        <li class="nav-item"><a class="nav-link" href="/integrations"><i class="bi bi-plug"></i> New Integration</a></li>
-        <li class="nav-item"><a class="nav-link" href="/support"><i class="bi bi-life-preserver"></i> Support</a></li>
+        <li class="nav-item"><a class="nav-link" href="/reports"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+        <li class="nav-item"><a class="nav-link" href="/transactions"><i class="bi bi-arrow-left-right"></i> Detalhes de Transações</a></li>
+        <li class="nav-item"><a class="nav-link" href="/integrations"><i class="bi bi-plug"></i> Nova Integração</a></li>
+        <li class="nav-item"><a class="nav-link" href="/support"><i class="bi bi-life-preserver"></i> Suporte</a></li>
       </ul>
     </div>
   </nav>
@@ -28,7 +28,7 @@
   <div class="container-fluid dashboard mt-4">
     <div class="row">
       <div class="col-md-6">
-        <h2>Data Transaction Graphs</h2>
+        <h2>Transações de Dados</h2>
         <div id="transaction-graph-1" style="height: 35vh" class="graph mb-4">
           <canvas id="graph1"></canvas>
         </div>
@@ -38,14 +38,14 @@
       </div>
       
       <div class="col-md-6">
-        <h2>Transaction Logs</h2>
+        <h2>Logs de Transações</h2>
         <div class="table-responsive" style="height: 100%;">
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Transaction ID</th>
-                <th>Amount (MBs)</th>
+                <th>Data</th>
+                <th>ID da Transação</th>
+                <th>Dados (MBs)</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -75,18 +75,21 @@
     var graph1 = new Chart(ctx1, {
       type: 'line',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho'],
         datasets: [{
-          label: 'Transactions Quantity',
+          label: 'Qtd de Transações',
           data: [65, 59, 80, 81, 56, 55, 40],
+          backgroundColor: 'rgba(75, 192, 192, .4)',
           borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4
         }]
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true
+            beginAtZero: false
           }
         }
       }
@@ -96,13 +99,14 @@
     var graph2 = new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho'],
         datasets: [{
-          label: 'Data Size (MB)',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          label: 'Dados (MB)',
+          data: [65, 59, 80, 81, 56, 55, 45],
           backgroundColor: 'rgba(153, 102, 255, 0.2)',
           borderColor: 'rgba(153, 102, 255, 1)',
-          borderWidth: 1
+          borderWidth: 3,
+          borderRadius: 5
         }]
       },
       options: {
